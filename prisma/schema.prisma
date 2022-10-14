@@ -7,30 +7,61 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Teachers {
+  id      String    @id @default(uuid())
+  name    String    @unique
+  courses Courses[]
 
+  @@map("teachers")
+}
 
 model Courses {
-  id            String    @id @default(uuid())
-  name          String    @unique
-  description   String?
-  duration      Int
-  created_at    DateTime      @default(now())
+  id             String           @id @default(uuid())
+  name           String           @unique
+  description    String?
+  duration       Int
+  created_at     DateTime         @default(now())
+  fk_teachers_id String
+  teacher        Teachers         @relation(fields: [fk_teachers_id], references: [id])
+  coursesModules CoursesModules[]
 
   @@map("courses")
 }
 
 model Modules {
-  id            String  @id   @default(uuid())
-  name          String  @unique
-  description   String
-  created_at    DateTime      @default(now())
+  id             String           @id @default(uuid())
+  name           String           @unique
+  description    String
+  created_at     DateTime         @default(now())
+  coursesModules CoursesModules[]
 
   @@map("modules")
 }
 
-model Categories {
-  id            String    @id       @default(uuid())
-  name          String    @unique
+model CoursesModules {
+  id           String   @id @default(uuid())
+  fk_id_course String
+  fk_id_module String
+  created_at   DateTime @default(now())
+  course       Courses  @relation(fields: [fk_id_course], references: [id])
+  module       Modules  @relation(fields: [fk_id_module], references: [id])
 
-  @@map("categories")
+  @@map("courses_modules")
+}
+
+model Authors {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  books Books[]
+
+  @@map("authors")
+}
+
+model Books {
+  id        String  @id @default(uuid())
+  name      String  @unique
+  author_id String
+  author    Authors @relation(fields: [author_id], references: [id])
+
+  @@map("books")
 }

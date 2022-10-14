@@ -3,13 +3,12 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const result = await prisma.courses.update({
-    where: {
-      id: "389db7ee-c177-4496-9f21-804ad4a5fda6",
-    },
+  const result = await prisma.courses.create({
     data: {
-      duration: 250,
       name: "Curso de ReactJS",
+      duration: 300,
+      description: "Curso de ReactJs muito foda foda",
+      fk_teachers_id: "f918aa96-bea4-4f81-8a23-c3039b4d9224",
     },
   });
 
